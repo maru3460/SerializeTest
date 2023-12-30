@@ -1,4 +1,4 @@
-# シリアライズのテスト(+DIパターン)
+# シリアライズのテスト(+DIコンテナ)
 JDK11がインストールされているPCで実行してください  
 
 ## 機能
@@ -7,9 +7,21 @@ JDK11がインストールされているPCで実行してください
 ## 実装予定
 ・例外処理  
 ・ユーザー名とパスワードを使ってログインできるようにする  
-・最初に管理者を作ってユーザー一覧を見れるようにする  
 ・cereatedAt, updatedAtの追加  
 
 ## 実行
-javac -d bin src/**/*.java  
-java -cp bin pre.Main  
+mkdir modules
+
+javac -d classes/logioBL/ src/logioBL/module-info.java src/logioBL/logioBL/**/*.java  
+jar cvf modules/logioBL.jar -C classes/logioBL .  
+
+javac --module-path modules -d classes/logioDA/ src/logioDA/module-info.java src/logioDA/logioDA/**/*.java  
+jar cvf modules/logioDA.jar -C classes/logioDA .  
+
+javac --module-path modules -d classes/logioDI/ src/logioDI/module-info.java src/logioDI/logioDI/**/*.java  
+jar cvf modules/logioDI.jar -C classes/logioDI .  
+
+javac --module-path modules -d classes/logioPre/ src/logioPre/module-info.java src/logioPre/logioPre/**/*.java  
+jar cvf modules/logioPre.jar -C classes/logioPre .  
+
+java --module-path modules --module logioPre/logioPre.presentation.Main  

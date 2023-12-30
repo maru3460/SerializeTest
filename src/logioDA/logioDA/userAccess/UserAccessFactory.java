@@ -1,8 +1,9 @@
-package da;
+package logioDA.userAccess;
 
-import bl.UserAccess;
+import logioBL.userAccess.UserAccess;
 
 public class UserAccessFactory {
+	@SuppressWarnings("exports")
 	public static UserAccess makeUserAccess(){
 		return new UserAccessImpl();
 	}

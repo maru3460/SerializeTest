@@ -1,6 +1,9 @@
-package bl;
+package logioBL.manageUser;
 
 import java.util.Optional;
+
+import logioBL.user.User;
+import logioBL.userAccess.UserAccess;
 
 public class ManageUserFactory {
 	public static Optional<ManageUser> 
@@ -13,4 +16,3 @@ public class ManageUserFactory {
 		return Optional.of(manageUser);
 	}
 }
-

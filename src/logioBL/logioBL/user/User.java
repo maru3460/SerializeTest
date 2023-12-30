@@ -1,4 +1,4 @@
-package bl;
+package logioBL.user;
 
 import java.io.Serializable;
 

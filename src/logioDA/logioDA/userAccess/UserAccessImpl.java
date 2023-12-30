@@ -1,4 +1,4 @@
-package da;
+package logioDA.userAccess;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -12,20 +12,27 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
-import bl.User;
-import bl.UserAccess;
+import logioBL.user.User;
+import logioBL.userAccess.UserAccess;
 
 class UserAccessImpl implements UserAccess{
-	private Path dataDirPath = Paths.get("src", "userdata");
-	private Path allUsersFilePath = dataDirPath.resolve(Paths.get("users.txt"));
+	private final Path dataDirPath = Paths.get("src", "userdata");
+	private final Path allUsersFilePath = dataDirPath.resolve(Paths.get("users.txt"));
 	
-	public void initDir() throws Exception{
+	UserAccessImpl(){
+		super();
+	}
+	
+	public boolean initDir() throws Exception{
 		if (Files.exists(dataDirPath) == false) {
 			Files.createDirectories(dataDirPath);
 			Files.createFile(allUsersFilePath);
+			return true;
 		}else if(Files.exists(allUsersFilePath) == false) {
 			Files.createFile(allUsersFilePath);
+			return true;
 		}
+		return false;
 	}
 	
 	public boolean searchUser(String name) throws Exception{

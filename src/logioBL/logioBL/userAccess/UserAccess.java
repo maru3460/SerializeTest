@@ -1,7 +1,9 @@
-package bl;
+package logioBL.userAccess;
+
+import logioBL.user.User;
 
 public interface UserAccess{
-	public void initDir() throws Exception;
+	public boolean initDir() throws Exception;
 	
 	public boolean searchUser(String name) throws Exception;
 	

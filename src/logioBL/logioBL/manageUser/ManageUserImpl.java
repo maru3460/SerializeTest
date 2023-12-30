@@ -1,13 +1,16 @@
-package bl;
+package logioBL.manageUser;
 
 import java.util.Optional;
+
+import logioBL.user.User;
+import logioBL.userAccess.UserAccess;
 
 class ManageUserImpl implements ManageUser{
 	private User user;
 	private UserAccess userAccess;
 	private String bfName;
 	
-	public ManageUserImpl(User user, UserAccess userAccess) {
+	ManageUserImpl(User user, UserAccess userAccess) {
 		this.user = user;
 		this.userAccess = userAccess;
 		bfName = user.getName();

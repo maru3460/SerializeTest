@@ -1,10 +1,13 @@
-package bl;
+package logioBL.manageUser;
 
 import java.util.Optional;
 
+import logioBL.user.User;
+import logioBL.userAccess.UserAccess;
+
 public interface ManageUser {
 	
-	public String getName();
+	String getName();
 	public Optional<String> setName(String name) throws Exception;
 	
 	public String getComments();

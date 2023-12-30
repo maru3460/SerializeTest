@@ -1,26 +1,41 @@
-package pre;
+package logioPre.presentation;
 
+import java.io.Console;
+import java.util.List;
 import java.util.Optional;
 import java.util.Scanner;
 
-import bl.ManageUser;
-import di.ManageUserContainer;
+import logioBL.manageAdmin.ManageAdmin;
+import logioBL.manageUser.ManageUser;
+import logioDI.diContainer.Container;
 
 public class Main {
 
 	public static void main(String[] args) throws Exception{
-		ManageUserContainer.initDir();
-		
 		boolean run = true;
 		String input;
 		int inputInt;
 		Scanner scan = new Scanner(System.in);
+		Console console = System.console();
+		if(console == null) {
+			System.out.println("IDEではなくコンソールで実行してください。");
+			scan.close();
+			return;
+		}
+		
+		Container container = new Container();
+		if(container.needAdmin()) {
+			makeAdmin(scan, console, container);
+			System.out.println();
+			System.out.println("-------------------------------");
+		}
 		
 		end:
 		while(run) {
 			System.out.println("何をしますか");
 			System.out.println("1.ログイン");
 			System.out.println("2.新規ユーザー登録");
+			System.out.println("3.管理者ログイン");
 			System.out.println("9.終了");
 			System.out.print(">");
 			input = scan.nextLine();
@@ -34,10 +49,13 @@ public class Main {
 			}
 			switch(inputInt) {
 			case 1:
-				login(scan);
+				login(scan, container);
 				break;
 			case 2:
-				createUser(scan);
+				createUser(scan, container);
+				break;
+			case 3:
+				adminLogin(scan, console, container);
 				break;
 			case 9:
 				System.out.println("終了します。");
@@ -52,11 +70,41 @@ public class Main {
 
 	}
 	
-	private static void login(Scanner scan) throws Exception{
+	private static void makeAdmin(Scanner scan, Console console, Container container) throws Exception{
+		System.out.println("初めての実行です。最初に管理者を作成します。");
+		
+		String name;
+		char[] password;
+		while(true) {
+			System.out.println("名前を入力してください。");
+			System.out.print(">");
+			name = scan.nextLine();
+			if(name.length() == 0) {
+				System.out.println("無効な名前です。");
+				System.out.println();
+				System.out.println("-------------------------------");
+				continue;
+			}
+			System.out.println("パスワードを入力してください。");
+			System.out.print(">");
+			password = console.readPassword();
+			if(password.length == 0) {
+				System.out.println("無効なパスワードです。");
+				System.out.println();
+				System.out.println("-------------------------------");
+				continue;
+			}
+			break;
+		}
+		container.createAdmin(name, new String(password));
+		System.out.println("管理者の作成が完了しました");
+	};
+	
+	private static void login(Scanner scan, Container container) throws Exception{
 		System.out.println("名前を入力してください。");
 		System.out.print(">");
 		String name = scan.nextLine();
-		Optional<ManageUser> tmpManageUser = ManageUserContainer.login(name);
+		Optional<ManageUser> tmpManageUser = container.login(name);
 		
 		if(tmpManageUser.isEmpty() || (name.length() == 0)) {
 			System.out.println("無効な名前です。");
@@ -106,7 +154,7 @@ public class Main {
 				System.out.println("コメントを変更しました。");
 				break;
 			case 9:
-				ManageUserContainer.logout(manageUser);
+				container.logout(manageUser);
 				System.out.println("\r\nログアウトしました。");
 				return;
 			default:
@@ -118,12 +166,12 @@ public class Main {
 		}
 	}
 
-	private static void createUser(Scanner scan) throws Exception{
+	private static void createUser(Scanner scan, Container container) throws Exception{
 		System.out.println("名前を決めてください。");
 		System.out.print(">");
 		String name = scan.nextLine();
 		
-		if(ManageUserContainer.searchUser(name) || (name.length() == 0)) {
+		if(container.searchUser(name) || (name.length() == 0)) {
 			System.out.println("無効な名前です。");
 			return;
 		}
@@ -142,8 +190,63 @@ public class Main {
 				sb.append(tmpComments + "\r\n");
 			}
 		}
-		ManageUserContainer.createUser(name, sb.toString());
+		container.createUser(name, sb.toString());
 		System.out.println("ユーザーを作成しました。");
+	}
+	
+	private static void adminLogin(Scanner scan, Console console, Container container) throws Exception{
+		System.out.println("名前を入力してください。");
+		System.out.print(">");
+		String name = scan.nextLine();
+		System.out.println("パスワードを入力してください。");
+		System.out.print(">");
+		char[] password = console.readPassword();
+		Optional<ManageAdmin> tmpManageAdmin = container.adminLogin(name, new String(password));
+		
+		if(tmpManageAdmin.isEmpty()) {
+			System.out.println("名前もしくはパスワードが無効です。");
+			return;
+		}
+		System.out.println();
+		System.out.println("-------------------------------");
+		
+		ManageAdmin manageAdmin = tmpManageAdmin.get();
+		String input;
+		int inputInt;
+		while(true) {
+			System.out.println("名前：" + manageAdmin.getAdminName() + "\r\n");
+			System.out.println("何をしますか");
+			System.out.println("1.全ユーザーの表示");
+			System.out.println("9.ログアウト");
+			System.out.print(">");
+			input = scan.nextLine();
+			try {
+				inputInt = Integer.parseInt(input);
+			}catch(NumberFormatException e) {
+				System.out.println("正確な数字を入力してください。");
+				System.out.println();
+				System.out.println("-------------------------------");
+				continue;
+			}
+			switch(inputInt) {
+			case 1:
+				System.out.println("ユーザー一覧");
+				List<String> users = manageAdmin.getAllUserName();
+				for(String user: users) {
+					System.out.println(user);
+				}
+				System.out.println();
+				System.out.println("-------------------------------");
+				break;
+			case 9:
+				System.out.println("\r\nログアウトしました。");
+				return;
+			default:
+				System.out.println("\r\n適切な数字を入力してください");
+			}
+			
+			System.out.println();
+		}
 	}
 	
 	private static String inputComments(Scanner scan) throws Exception{
