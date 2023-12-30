@@ -9,6 +9,13 @@ JDK11がインストールされているPCで実行してください
 ・ユーザー名とパスワードを使ってログインできるようにする  
 ・cereatedAt, updatedAtの追加  
 
+## 名前  
+・logio: login, logout  
+・BL: bisiness logic  
+・DA: data access  
+・DI: Dependency Injection  
+・Pre: Presentation  
+
 ## 実行
 mkdir modules
 
