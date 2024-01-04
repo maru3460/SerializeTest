@@ -5,6 +5,9 @@ import java.util.Optional;
 import logioBL.user.User;
 import logioBL.userAccess.UserAccess;
 
+/**
+ * 一般アカウントの管理を行うクラスで実装するインターフェース。
+ */
 public interface ManageUser {
 	
 	String getName();

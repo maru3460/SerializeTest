@@ -2,6 +2,9 @@ package logioBL.adminAccess;
 
 import java.util.List;
 
+/**
+ * 管理者アカウントへのアクセスを行うクラスで実装するインターフェース。
+ */
 public interface AdminAccess {
 	public boolean isPrepared() throws Exception;
 	

@@ -9,14 +9,38 @@ import logioBL.manageAdmin.ManageAdmin;
 import logioBL.manageUser.ManageUser;
 import logioDI.diContainer.Container;
 
+/**
+ * 画面の管理を行うクラスです。
+ * 起動時はこのクラスを実行してください。
+ */
 public class Main {
-
+	
+	/**
+	 * mainメソッドです。
+	 * 
+	 * @param args 入力しても影響はありません。
+	 * @throws Exception 例外
+	 */
 	public static void main(String[] args) throws Exception{
+		
+		/**
+		 * ループの制御用変数です。
+		 * プログラムを終了する際はfalseにしてください。
+		 */
 		boolean run = true;
+		
+		/** 入力を受け取る変数です。 */
 		String input;
+		
+		/** 入力を受け取り、整数に変換する際に使用する変数です。 */
 		int inputInt;
+		
+		/** Scannerです。 */
 		Scanner scan = new Scanner(System.in);
+		
+		/** Consoleです。パスワードの入力時に使います。 */
 		Console console = System.console();
+		
 		if(console == null) {
 			System.out.println("IDEではなくコンソールで実行してください。");
 			scan.close();
@@ -24,7 +48,7 @@ public class Main {
 		}
 		
 		Container container = new Container();
-		if(container.needAdmin()) {
+		if(container.getNeedInit()) {
 			makeAdmin(scan, console, container);
 			System.out.println();
 			System.out.println("-------------------------------");
@@ -70,6 +94,14 @@ public class Main {
 
 	}
 	
+	/**
+	 * 管理者の作成時の処理をするメソッドです。
+	 * 
+	 * @param scan
+	 * @param console
+	 * @param container
+	 * @throws Exception
+	 */
 	private static void makeAdmin(Scanner scan, Console console, Container container) throws Exception{
 		System.out.println("初めての実行です。最初に管理者を作成します。");
 		
@@ -100,6 +132,13 @@ public class Main {
 		System.out.println("管理者の作成が完了しました");
 	};
 	
+	/**
+	 * ログイン時の処理をするメソッドです。
+	 * 
+	 * @param scan
+	 * @param container
+	 * @throws Exception
+	 */
 	private static void login(Scanner scan, Container container) throws Exception{
 		System.out.println("名前を入力してください。");
 		System.out.print(">");
@@ -165,7 +204,14 @@ public class Main {
 			System.out.println("-------------------------------");
 		}
 	}
-
+	
+	/**
+	 * 新規の一般ユーザーを作成する際の処理をするメソッドです。
+	 * 
+	 * @param scan
+	 * @param container
+	 * @throws Exception
+	 */
 	private static void createUser(Scanner scan, Container container) throws Exception{
 		System.out.println("名前を決めてください。");
 		System.out.print(">");
@@ -194,6 +240,14 @@ public class Main {
 		System.out.println("ユーザーを作成しました。");
 	}
 	
+	/**
+	 * 管理者のログイン時の処理をするメソッドです。
+	 * 
+	 * @param scan
+	 * @param console
+	 * @param container
+	 * @throws Exception
+	 */
 	private static void adminLogin(Scanner scan, Console console, Container container) throws Exception{
 		System.out.println("名前を入力してください。");
 		System.out.print(">");
@@ -249,6 +303,13 @@ public class Main {
 		}
 	}
 	
+	/**
+	 * コメントの入力を行うメソッドです。
+	 * 
+	 * @param scan
+	 * @return 入力されたコメント。
+	 * @throws Exception
+	 */
 	private static String inputComments(Scanner scan) throws Exception{
 		System.out.println("\r\nコメントを入力してください");
 		System.out.println("endで入力を終了します。");

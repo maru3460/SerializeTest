@@ -2,6 +2,9 @@ package logioBL.manageAdmin;
 
 import java.util.List;
 
+/**
+ * 管理者アカウントでの操作を行うクラスで実装するインターフェース。
+ */
 public interface ManageAdmin {
 	public String getAdminName();
 	

@@ -2,6 +2,9 @@ package logioBL.userAccess;
 
 import logioBL.user.User;
 
+/**
+ * 一般アカウントへのアクセスを行うクラスで実装するインターフェース。
+ */
 public interface UserAccess{
 	public boolean initDir() throws Exception;
 	
