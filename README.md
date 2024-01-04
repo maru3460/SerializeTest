@@ -33,3 +33,14 @@ javac --module-path modules -d classes/logioPre/ src/logioPre/module-info.java s
 jar cvf modules/logioPre.jar -C classes/logioPre .  
 
 java --module-path modules --module logioPre/logioPre.presentation.Main  
+
+## javadocの作成  
+javadoc -d docs/logioBL $(find src/logioBL -name "*.java")
+
+javadoc --module-path modules --add-modules logioBL -d docs/logioDA $(find src/logioDA -name "*.java") 
+
+javadoc --module-path modules --add-modules logioBL,logioDA -d docs/logioDI $(find src/logioDI -name "*.java")  
+
+javadoc --module-path modules --add-modules logioBL,logioDI -d docs/logioPre $(find src/logioPre -name "*.java")  
+
+※src/logioBL/logioBL/**/*.java と $(find src/logioBL -name "*.java")はどちらでもOK  
